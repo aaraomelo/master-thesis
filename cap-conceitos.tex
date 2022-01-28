@@ -2,259 +2,180 @@
 \chapter{Conceitos}
 \label{cap:conceitos}
 
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto.
 
 %% ------------------------------------------------------------------------- %%
-\section{Fundamentos}\index{área do trabalho!fundamentos}
+\section{Perceptrons de Camada Única}\index{área do trabalho!fundamentos}
 \label{sec:fundamentos}
 
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto.
+  O perceptron é construído em torno de um neurônio não-linear, isto é, o modelo de \textit{MacCulloch-Pitts} de um neurônio. Este modelo de neurônio consite de um combinador linear seguido por um limitador abrupto (realizando a função sinal), como apresentador na Figura \ref{sec:perceptron:model}. O nó aditivo do modelo neuronal caucula uma combinação linear das entradas aplicadas às sua sinapses e também incorpora um bias aplicado externamente. A soma resultante, isto é, o campo local induzido, é aplicado ao limitador abrupto.
 
-%% ------------------------------------------------------------------------- %%
-\subsection{Ácidos Nucléicos}\index{ácido!nucléico}\index{nucleotídeos}
-\label{sec:acidos_nucleicos}
-
-Na Figura~\ref{fig:humanbeta} texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto.
-
-\begin{figure}[!h]
-  \centering
-  \includegraphics[width=.40\textwidth]{graph} 
-  \caption{Descrição da figura mostrada.}
-  \label{fig:humanbeta} 
+\begin{figure}[!htpb] \centering{
+  \includegraphics[scale=1]{figuras/perceptron/main.pdf}}
+  \caption{Grafo de fluxo do sinal do perceptron}
+  \label{sec:perceptron:model}
 \end{figure}
 
-%% ------------------------------------------------------------------------- %%
-\subsection{Aminoácidos}\index{ácido!amino|(}
-\label{sec:amino_acidos}
+\subsection{ Teorema de convergência do perceptron}
 
-Veja na Tabela \ref{tab:amino_acidos}...  texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto.
+Para derivar o algoritmo de aprendizagem por correção de erro para o perceptron, achamos mais conveniente trabalhar com o modelo modificado do grafo de fluxo de sinal da Figura \ref{sec:perceptron:graphmodel}. Neste segundo modelo, que é equivalete àquele da Figura \ref{sec:perceptron:model}, o bias $b(n)$ é tratado como um peso sináptico acionado por uma entrada fixa igual a $+1$. Podemos assim definir o vetor de entrada $(m+1)$-por-$1$
+\begin{equation*}
+  \textbf{x}(n) = \left[+1,\, x_1(n)\, x_2(n), \cdots,\, x_m(n)\right]^T
+\end{equation*}
+onde $n$ representa o passo de iteração na aplicação do algoritmo. Correspondentemente, definimos o vetor de pesos $(m+1)$-por-$1$ como
+\begin{equation*}
+  \textbf{w}(n) = \left[b(n),\, w_1(n)\, w_2(n), \cdots,\, w_m(n)\right]^T
+\end{equation*}
 
-\begin{table}[!t]
-\begin{center}
-    \begin{tabular}{c|c|l}
-	 \hline
-	 Código & Abreviatura & Nome completo \\ \hline
-     \texttt{A} & Ala & Alanina \\
-     \texttt{C} & Cys & Cisteína \\
-     ...        & ... & ... \\
-     \texttt{W} & Trp & Tiptofano \\
-     \texttt{Y} & Tyr & Tirosina \\ \hline
-    \end{tabular}
-  \caption{Códigos, abreviaturas e nomes dos aminoácidos.}
-  \label{tab:amino_acidos}
-\end{center}
-\end{table}
-\index{ácido!amino|)}
+Corespondentemente, a saída do combinador linear pode ser escrita na forma compacta
+\begin{align}
+  \nonumber v(n)&=\sum_{i=0}^{m}w_i(n)x_i(n)\\ 
+  &=\textbf{w}^T(n)\textbf{x}(n) \label{sec:perceptron:campolocal}
+\end{align}
+onde $w_0(n)$ representa o bias $b(n)$. Para $n$ fixo, a equação $\textbf{w}^T\textbf{x}=0$, traçada em um espaço multidimensional (traçada para um bias determinado) com coordenadas $ x_1\, x_2, \cdots,\, x_m$, define um hiperplano como a superfície de decisão entre duas classes diferentes de entradas.
 
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto.
+\begin{figure}[!htpb] \centering{
+  \includegraphics[scale=1]{figuras/perceptronmodel/main.pdf}}
+  \caption{Grafo de fluxo do sinal do perceptron}
+  \label{sec:perceptron:graphmodel}
+\end{figure}
+
+Para o perceptron funcionar corretamente, as duas classes $\mathscr{C}_1$ e $\mathscr{C}_2$ devem ser \textit{linearmente separáveis}. Por sua vez, isto significa que os mpadrões a serem classificados devem estar suficientemente separados entre si para assegurar que a superfície de dicisão consista de um hiperplano.
+
+Suponhamos então que as variáveis de entrada do perceptron se originem de duas classes linearmente separáveis. Seja $\mathscr{X}_1$ o subconjunto de vetores de treinamento $\textbf{x}_1(1),\, \textbf{x}_1(2), \, \cdots $ que pertencem à classe $\mathscr{C}_1$ e seja $\mathscr{X}_2$ o subconjunto de vetores de treinamento $\textbf{x}_2(1),\, \textbf{x}_2(2), \, \cdots $ que pertencem à classe $\mathscr{C}_2$. A união de $\mathscr{X}_1$ e $\mathscr{X}_2$ é o conjunto de treinamento completo $\mathscr{X}$. Dados os conjuntos de vetores $\mathscr{X}_1$ e $\mathscr{X}_2$ para treinar o classificador, o processo de treinamento envolve o ajuste de peso $\textbf{w}$ de tal forma que as duas classes $\mathscr{C}_1$ e $\mathscr{C}_2$ sejam linearmente separáveis. Isto é, existe um vetor de peso $\textbf{w}$ para o qual podemos afirmar
+
+\begin{equation}
+  \begin{aligned} \label{sec:perceptron:classes}
+    \textbf{w}^T\textbf{x} &> 0 \text{ para todo vetor de entrada $\textbf{x}$ pertencente à classe  $\mathscr{C}_1$} \\       
+    \textbf{w}^T\textbf{x} &\leq 0 \text{ para todo vetor de entrada $\textbf{x}$ pertencente à classe  $\mathscr{C}_2$}
+  \end{aligned}
+\end{equation}
+Na segunda linha da Equação \ref{sec:perceptron:classes}, escolhemos arbitrariamente que o vetor de entrada $\textbf{x}$ pertence à classe $\mathscr{C}_2$ se $\textbf{w}^T\textbf{x}=0$. Dados os sobconjuntos de vetores de treinamento $\mathscr{X}_1$ e $\mathscr{X}_2$, o problema de treinamento para o perceptron elementar é, então, encontrar um vetor de peso $\textbf{w}$ tal que as duas desigualdades da Equação \ref{sec:perceptron:classes} sejam satisfeitas.
+
+O algoritmo para adaptar o vetor de peso do perceptron elementar pode ser formulado como segue:
+
+\begin{enumerate}
+  \item Se o $n$-ésimo membro do conjunto de treinamento, $\textbf{x}(n)$, é corretamente classificado pelo vetor de peso $\textbf{w}(n)$ calculado na $n$-ésima iteração do algoritmo, então o vetor de peso do perceptron não é corrigido de acordo com a regra:
+  \begin{equation}
+    \begin{aligned} \label{sec:perceptron:alg1}
+      \textbf{w}(n+1) &= \textbf{w}(n)\quad \text{ se $\textbf{w}^T(n)\textbf{x}(n) > 0 $ e $\textbf{x}(n)$ pertencente à classe  $\mathscr{C}_1$} \\
+      \textbf{w}(n+1) &= \textbf{w}(n)\quad \text{ se $\textbf{w}^T(n)\textbf{x}(n) \leq 0 $ e $\textbf{x}(n)$ pertencente à classe  $\mathscr{C}_2$} 
+    \end{aligned}
+  \end{equation}
+  \item Caso contrário, o vetor de peso do percptron é atualizado de acordo com a regra
+    \begin{equation}
+      \begin{aligned} \label{sec:perceptron:alg2}
+        \textbf{w}(n+1) &= \textbf{w}(n) - \eta (n)\textbf{x}(n)\quad \text{ se $\textbf{w}^T(n)\textbf{x}(n) > 0 $ e $\textbf{x}(n)$ pertencente à classe  $\mathscr{C}_2$} \\
+        \textbf{w}(n+1) &= \textbf{w}(n) + \eta (n)\textbf{x}(n)\quad \text{ se $\textbf{w}^T(n)\textbf{x}(n) \leq 0 $ e $\textbf{x}(n)$ pertencente à classe  $\mathscr{C}_1$} 
+      \end{aligned}
+    \end{equation}
+\end{enumerate}
+onde o \textit{parâmetro da taxa de aprendizagem} $\eta (n)$ controla o ajuste aplicado ao vetor de peso na iteração $n$.
+
+\noindent
+Se $\eta(n)=\eta>0$, onde $\eta$ é uma constante independente do número da iteração $n$, temos uma \textit{regra de adaptação com incremento fixo} para o perceptron.
+
+No que segue, primeiro provamos a convergência de uma regra de adaptação com incremento fixo para a qual $\eta=1$. Claramente, o valor de $\eta$ não é importante, desde que seja positivo. Um valor de $\eta \neq 1$ meramente escala os vetores de padrões sem afetar a sua separabilidade.
+
+A prova é apresentada para a condição inicial $\textbf{w}(0)=\textbf{0}$. Suponhamos que $\textbf{w}^T(n)\textbf{x}(n) < 0 $ para $n=1,\, 2,\,\cdots$, e que o vetor de entrada $\textbf{x}(n)$ pertença ao sbconjunto $\mathscr{X}_1$. Isto é, o perceptron classifica incorretamente os vetores $\textbf{x}(1),\,\textbf{x}(2),\,\cdots$, já que a segunda condição da Equação \ref{sec:perceptron:classes} é violada. Então, com a constante $\eta(n)=1$, podemos a segunda linha da Equação \ref{sec:perceptron:alg2} para escrever
+\begin{equation}\label{sec:perceptron:weightplus}
+  \textbf{w}(n+1)=\textbf{w}(n)+\textbf{x}(n)\quad \text{para $\textbf{x}(n)$ pertencente à classe $\mathscr{C}_1$.}
+\end{equation}
+Dada a condição inicial $\textbf{w}(0)=\textbf{0}$, podemos resolver iterativamente esta equação para $\textbf{w}(n+1)$ obtendo o resultado
+\begin{equation}\label{sec:perceptron:weightplusint}
+  \textbf{w}(n+1)=\textbf{x}(1)+\textbf{x}(2)+\cdots+\textbf{x}(n)
+\end{equation}
+Como as classes $\mathscr{C}_1$ e $\mathscr{C}_2$ são assumidas como sendo linearmnete separáveis, existe uma solução $\textbf{w}_0$ para a qual $\textbf{w}^T(n)\textbf{x}(n)>0$ para os vetores $\textbf{x}(1),\,\cdots,\,\textbf{x}(n)$ pertencentes ao subconjunto $\mathscr{X}_1$. Para uma solução fixa $\textbf{w}_0$, podemos então definir um número positivo $\alpha$ como
+\begin{equation}\label{sec:perceptro:alphamin}
+  \alpha = \min_{\textbf{x}(n)\in \mathscr{X}_1}\textbf{w}_0^T\textbf{x}(n)
+\end{equation}
+Assim, multiplicando ambos os lados da Equação \ref{sec:perceptron:weightplusint} pelo vetor linha $\textbf{w}_0^T$, obtemos
+\begin{equation*}
+  \textbf{w}_0^T\textbf{w}(n+1)=\textbf{w}_0^T\textbf{x}(1)+\textbf{w}_0^T\textbf{x}(2)+\cdots+\textbf{w}_0^T\textbf{x}(n)
+\end{equation*}
+Consequentemente, com base na definição dada na Equação \ref{sec:perceptro:alphamin}, temos
+\begin{equation*}
+  \textbf{w}_0^T\textbf{w}(n+1) \geq n\alpha
+\end{equation*}
+Da \textit{desigualdade de Cauchy-Schwarz} segue que
+\begin{equation*}
+  \Vert \textbf{w}_0\Vert^2\Vert \textbf{w}(n+1) \Vert^2\geq n^2\alpha^2
+\end{equation*}
+ou de forma equivalente,
+\begin{equation}\label{sec:perceptron:firsteq}
+  \Vert \textbf{w}(n+1) \Vert^2\geq \frac{n^2\alpha^2}{\Vert \textbf{w}_0\Vert^2}
+\end{equation}
+A seguir, seguimos com um outro caminho de desenvolvimento. Em particular, reescrevemos a Equação \ref{sec:perceptron:weightplus} na forma
+\begin{equation}\label{sec:perceptron:weightplusmodified}
+  \textbf{w}(k+1)=\textbf{w}(k)+\textbf{x}(k)\quad \text{para $k=1,\,\cdots,\,n$ e $\textbf{x}(k)\in \mathscr{X}_1$}
+\end{equation}
+Calculando a morma euclidiana quadrática de ambos os lados da Equação \ref{sec:perceptron:weightplusmodified}, obtemos
+\begin{equation}\label{sec:perceptron:weightplusnormed}
+  \Vert \textbf{w}(k+1) \Vert^2= \Vert \textbf{w}(k) \Vert^2+\Vert \textbf{x}(k) \Vert^2+2\textbf{w}^T(k)\textbf{x}(k)
+\end{equation}
+Mas, sob a suposição que o perceptron classifica incorretamente um vetor de entrada $\textbf{x}(k)$ pertencente ao subconjunto $\mathscr{X}_1$, temos $\textbf{w}^T(k)\textbf{x}(k)<0$. Consequentemente, deduzimos da Equação \ref{sec:perceptron:weightplusnormed} que
+\begin{equation*}\label{sec:perceptron:weightplusnormeddiff}
+  \Vert \textbf{w}(k+1) \Vert^2- \Vert \textbf{w}(k) \Vert^2\leq  \Vert \textbf{x}(k) \Vert^2, \quad k=1,\,\cdots,\, n
+\end{equation*}
+Somando estas desigualdades para $k=1,\cdots,\, n$ e invocando a condição inicial assumida $\textbf{w}(0)=\textbf{0}$, obtemos a desigualdade:
+\begin{equation}
+  \begin{aligned} \label{sec:perceptron:weightplussecond}
+    \Vert \textbf{w}(k+1) \Vert^2 &\leq \sum_{k=1}^n \Vert \textbf{x}(k) \Vert^2\\
+    &\leq n\beta
+  \end{aligned}
+\end{equation}
+onde $\beta$ é um número positivo definido por
+\begin{equation}\label{sec:perceptron:beta}
+  \beta=\max_{\textbf{x}(k)\in\mathscr{X}_1}\Vert\textbf{x}(k)\Vert^2
+\end{equation}
+A Equação \ref{sec:perceptron:weightplussecond} afirma que a norma euclidana quadrática do vetor de peso $\textbf{w}(n+1)$ cresce no máximo linearmente como o número de iterações $n$.
+  O segundo resultado da Equação \ref{sec:perceptron:weightplussecond} está claramente em conflito com o resultado anterior da Equação \ref{sec:perceptron:firsteq} para valores suficientemente grandes de $n$. De fato, podemos afirmar que $n$ não pode ser maior que um valor $n_{\rm max}$ para o qual as Equações \ref{sec:perceptron:firsteq} \ref{sec:perceptron:weightplussecond} são ambas satisfeitas com um sinal de igualdade. Isto é, dada uma solução $\textbf{w}_0$ temos
+  \begin{equation}\label{sec:perceptron:nmax}
+    n_{\rm max}=\frac{\beta\Vert\textbf{w}_0\Vert^2}{\alpha^2}
+  \end{equation}
+  Provamos assim que para $\eta(n)=1$ para todo $n$, e $\textbf{w}(0)=\textbf{0}$, e desde que exista um vetor solução $\textbf{w}_0$, a regra para adaptar os pesos sinápticos do perceptron deve terminar após no máximo $n_{\rm max}$ iterações. Note também que das Equações \ref{sec:perceptro:alphamin}, \ref{sec:perceptron:beta} e \ref{sec:perceptron:nmax} que não existe uma solução única para $\textbf{w}_0$ ou $n_{\rm max}$.
 
 
-%% ------------------------------------------------------------------------- %%
-\section{Exemplo de Código-Fonte em Java}
-\label{sec:exemplo_codigo_fonte}
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto.
 
-% Foi utilizado o pacote listing para formatar código fonte
-% http://ctan.org/tex-archive/macros/latex/contrib/listings/listings.pdf
-% Veja no preambulo do arquivo tese-exemplo.tex os parâmetros de configuração.
+  \begin{figure}[!htpb] \centering{
+    \includegraphics[scale=1]{figuras/perceptrondemo/main.pdf}}
+    \caption{Número máximo de iterações}
+    \label{sec:perceptron:demo}
+  \end{figure}
 
-\begin{lstlisting}[frame=trbl]
-    for(i = 0; i < 20; i++)
-    {
-        // Comentario 
-        System.out.println("Mensagem...");
-    }
-\end{lstlisting}
+  \floatname{algorithm}{Procedure}
+  \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+  \renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+  \begin{algorithm}
+    \caption{Algoritmo de convergência do perceptron} 
+    \begin{algorithmic}[1]
+      \State $\textbf{X}_1\leftarrow$ Entradas pertencentes à classe $\mathscr{X}_1$
+      \State $\textbf{X}_2\leftarrow$ Entradas pertencentes à classe $\mathscr{X}_2$
+      \State Inicialize $\textbf{w}$ com zeros
+      \While {$!convergence$}
+      \State Escolha aleatoriamente $\textbf{x}\in\textbf{X}_1\cup \textbf{X}_2$ 
+
+      \If {$\textbf{x}\in\textbf{X}_1$ e $\textbf{w}\cdot\textbf{x}<0$}
+      \State $\textbf{w} = \textbf{w} + \textbf{x}$
+      \EndIf
+
+      \If {$\textbf{x}\in\textbf{X}_2$ e $\textbf{w}\cdot\textbf{x}\geq 0$}
+      \State $\textbf{w} = \textbf{w} -  \textbf{x}$
+      \EndIf
+
+      \EndWhile
+      % \For {$iteration=1,2,\ldots$}
+      %   \For {$actor=1,2,\ldots,N$}
+      %     \State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
+      %     \State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
+      %   \EndFor
+      %   \State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and minibatch size $M\leq NT$
+      %   \State $\theta_{old}\leftarrow\theta$
+      % \EndFor
+    \end{algorithmic} 
+  \end{algorithm}
+
+  \section{Perceptrons de Múltiplas Camadas}
 
 
-%% ------------------------------------------------------------------------- %%
-\section{Algumas Referências}
-\label{sec:algumas_referencias}
-
-É muito recomendável a utilização de arquivos \emph{bibtex} para o gerenciamento
-de referências a trabalhos. Nesse sentido existem três plataformas gratuitas
-que permitem a busca de referências acadêmicas em formato bib: 
-\begin{itemize}
-	\item \emph{CiteULike} (patrocinados por Springer): \url{www.citeulike.org}
-	\item Coleção de bibliografia em Ciência da Computação: \url{liinwww.ira.uka.de/bibliography}
-	\item Google acadêmico (habilitar bibtex nas preferências): \url{scholar.google.com.br}
-\end{itemize}
-Lamentavelmente, ainda não existe um mecanismo de verificação ou validação das
-informações nessas plataformas. Portanto, é fortemente sugerido validar todas
-as informações de tal forma que as entradas bib estejam corretas.  Também, tome
-muito cuidado na padronização das referências bibliográficas: ou considere TODOS
-os nomes dos autores por extenso, ou TODOS os nomes dos autores abreviados.
-Evite misturas inapropriadas.
-
-Exemplos de referências com a tag:
-\begin{itemize}
-\item @Book: \cite{JW82}.
-{\scriptsize\begin{verbatim}
-@Book{JW82,
- author   = {Richard A. Johnson and Dean W. Wichern},
- title    = {Applied Multivariate Statistical Analysis},
- publisher= {Prentice-Hall},
- year     = {1983}
-}
-\end{verbatim}}
-
-\item @Article: \cite{MenaChalco08}.
-{\scriptsize\begin{verbatim}
-@Article{MenaChalco08,
- author   = {Jesús P. Mena-Chalco and Helaine Carrer and Yossi Zana and 
-            Roberto M. Cesar-Jr.},
- title    = {Identification of protein coding regions using the modified 
-            {G}abor-wavelet transform},
- journal  = {IEEE/ACM Transactions on Computational Biology and Bioinformatics},
- volume   = {5},
- pages    = {198-207},
- year     = {2008},
-}
-\end{verbatim}}
-
-\item @InProceedings: \cite{alves03:simi}.
-{\scriptsize\begin{verbatim}
-@InProceedings{alves03:simi,
- author   = {Carlos E. R. Alves and Edson N. Cáceres and Frank Dehne and 
-            Siang W. Song},
- title    = {A Parallel Wavefront Algorithm for Efficient Biological 
-            Sequence Comparison},
- booktitle= {ICCSA '03: The 2003 International Conference on Computational Science
-            and its Applications},
- year     = {2003},
- pages    = {249-258},
- month    = May,
- publisher= {Springer-Verlag}
-}
-\end{verbatim}}
-
-\item @InCollection: \cite{bobaoglu93:concepts}.
-{\scriptsize\begin{verbatim}
-@InCollection{bobaoglu93:concepts,
- author   = {Ozalp Babaoglu and Keith Marzullo},
- title    = {Consistent Global States of Distributed Systems: Fundamental Concepts
-            and Mechanisms},
- editor   = {Sape Mullender},
- booktitle= {Distributed Systems},
- edition  = {segunda},
- year     = {1993},
- pages    = {55-96}
-}
-\end{verbatim}}
-
-\item @Conference: \cite{bronevetsky02}.
-{\scriptsize\begin{verbatim}
-@Conference{bronevetsky02,
- author   = {Greg Bronevetsky and Daniel Marques and Keshav Pingali and 
-            Paul Stodghill},
- title    = {Automated application-level checkpointing of {MPI} programs},
- booktitle= {PPoPP '03: Proceedings of the 9th ACM SIGPLAN Symposium on Principles
-            and Practice of Parallel Programming},
- year     = {2003},
- pages    = {84-89}
-}
-\end{verbatim}}
-
-\item @PhdThesis: \cite{garcia01:PhD}.
-{\scriptsize\begin{verbatim}
-@PhdThesis{garcia01:PhD,
- author   = {Islene C. Garcia},
- title    = {Visões Progressivas de Computações Distribuídas},
- school   = {Instituto de Computação, Universidade de Campinas, Brasil},
- year     = {2001},
- month    = {Dezembro}
-}
-\end{verbatim}}
-
-\item @MastersThesis: \cite{schmidt03:MSc}.
-{\scriptsize\begin{verbatim}
-@MastersThesis{schmidt03:MSc,
- author   = {Rodrigo M. Schmidt},
- title    = {Coleta de Lixo para Protocolos de \emph{Checkpointing}},
- school   = {Instituto de Computação, Universidade de Campinas, Brasil},
- year     = {2003},
- month    = Oct
-}
-\end{verbatim}}
-
-\item @Techreport: \cite{alvisi99:analysisCIC}.
-{\scriptsize\begin{verbatim}
-@Techreport{alvisi99:analysisCIC,
- author   = {Lorenzo Alvisi and Elmootazbellah Elnozahy and Sriram S. Rao and
-            Syed A. Husain and Asanka Del Mel},
- title    = {An Analysis of Comunication-Induced Checkpointing},
- institution= {Department of Computer Science, University of Texas at Austin},
- year     = {1999},
- number   = {TR-99-01},
- address  = {Austin, {USA}}
-}
-\end{verbatim}}
-
-\item @Manual: \cite{CORBA:spec}.
-{\scriptsize\begin{verbatim}
-@Manual{CORBA:spec,
- title    = {{CORBA v3.0 Specification}},
- author   = {{Object Management Group}},
- month    = Jul,
- year     = {2002},
- note     = {{OMG Document 02-06-33}}
-}
-\end{verbatim}}
-
-\item @Misc: \cite{gridftp}.
-{\scriptsize\begin{verbatim}
-@Misc{gridftp,
- author   = {William Allcock},
- title    = {{GridFTP} protocol specification. {Global Grid Forum}
-            Recommendation ({GFD}.20)},
- year     = {2003}
-}
-\end{verbatim}}
-
-\item @Misc: para referência a artigo online \cite{fowler04:designDead}.
-{\scriptsize\begin{verbatim}
-@Misc{fowler04:designDead,
- author   = {Martin Fowler},
- title    = {Is Design Dead?},
- year     = {2004},
- month    = May,
- note     = {Último acesso em 30/1/2010},
- howpublished= {\url{http://martinfowler.com/articles/designDead.html}},
-}
-\end{verbatim}}
-
-\item @Misc: para referência a página web \cite{FSF:GNU-GPL}.
-{\scriptsize\begin{verbatim}
-@Misc{FSF:GNU-GPL,
- author   = {Free Software Foundation},
- title    = {GNU general public license},
- note     = {Último acesso em 30/1/2010},
- howpublished= {\url{http://www.gnu.org/copyleft/gpl.html}},
-}
-\end{verbatim}}
-
-\end{itemize}
 
