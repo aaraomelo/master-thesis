@@ -141,3 +141,41 @@ A Equação \ref{sec:perceptron:weightplussecond} afirma que a norma euclidana q
     \caption{Número máximo de iterações}
     \label{sec:perceptron:demo}
   \end{figure}
+
+  \floatname{algorithm}{Procedure}
+  \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+  \renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+  \begin{algorithm}
+    \caption{Algoritmo de convergência do perceptron} 
+    \begin{algorithmic}[1]
+      \State $\textbf{X}_1\leftarrow$ Entradas pertencentes à classe $\mathscr{X}_1$
+      \State $\textbf{X}_2\leftarrow$ Entradas pertencentes à classe $\mathscr{X}_2$
+      \State Inicialize $\textbf{w}$ com zeros
+      \While {$!convergence$}
+      \State Escolha aleatoriamente $\textbf{x}\in\textbf{X}_1\cup \textbf{X}_2$ 
+
+      \If {$\textbf{x}\in\textbf{X}_1$ e $\textbf{w}\cdot\textbf{x}<0$}
+      \State $\textbf{w} = \textbf{w} + \textbf{x}$
+      \EndIf
+
+      \If {$\textbf{x}\in\textbf{X}_2$ e $\textbf{w}\cdot\textbf{x}\geq 0$}
+      \State $\textbf{w} = \textbf{w} -  \textbf{x}$
+      \EndIf
+
+      \EndWhile
+      % \For {$iteration=1,2,\ldots$}
+      %   \For {$actor=1,2,\ldots,N$}
+      %     \State Run policy $\pi_{\theta_{old}}$ in environment for $T$ time steps
+      %     \State Compute advantage estimates $\hat{A}_{1},\ldots,\hat{A}_{T}$
+      %   \EndFor
+      %   \State Optimize surrogate $L$ wrt. $\theta$, with $K$ epochs and minibatch size $M\leq NT$
+      %   \State $\theta_{old}\leftarrow\theta$
+      % \EndFor
+    \end{algorithmic} 
+  \end{algorithm}
+
+  \section{Perceptrons de Múltiplas Camadas}
+
+
+
